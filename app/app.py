@@ -6,21 +6,21 @@ from datetime import datetime, timedelta
 
 app = Flask(__name__)
 
-# Configuração do logger
+# Logger configuration
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-# Obtenha o URL do Alertmanager externo a partir da variável de ambiente
+# Get the external Alertmanager URL from the environment variable
 ALERTMANAGER_EXTERNAL_URL = os.getenv("ALERTMANAGER_EXTERNAL_URL", "http://127.0.0.1:9093/api/v1/alerts")
 
 @app.route('/', methods=['POST'])
 def redirect_alertmanager():
     try:
         data = request.get_json()
-        logger.info("Recebido um alerta para redirecionamento")
-        # logger.info("Conteúdo do alerta recebido: %s", data)
+        logger.info("Received an alert for redirection")
+        # logger.info("Alert content received: %s", data)
 
-        # Extrai e converte o payload no formato que o Alertmanager espera
+        # Extract and convert the payload to the format expected by Alertmanager
         formatted_alerts = []
         for alert in data.get("alerts", []):
             formatted_alert = {
@@ -32,13 +32,13 @@ def redirect_alertmanager():
             }
             formatted_alerts.append(formatted_alert)
 
-        # Envia o alerta formatado para o Alertmanager externo
+        # Send the formatted alert to the external Alertmanager
         response = requests.post(ALERTMANAGER_EXTERNAL_URL, json=formatted_alerts)
         response.raise_for_status()
 
-        logger.info("Alerta redirecionado com sucesso para %s", ALERTMANAGER_EXTERNAL_URL)
+        logger.info("Alert successfully redirected to %s", ALERTMANAGER_EXTERNAL_URL)
         return jsonify({"status": "alert sent", "alertmanager_response": response.json()}), response.status_code
 
     except requests.exceptions.RequestException as e:
-        logger.error("Falha ao redirecionar o alerta: %s", str(e))
+        logger.error("Failed to redirect the alert: %s", str(e))
         return jsonify({"status": "failed to send alert", "error": str(e)}), 500
