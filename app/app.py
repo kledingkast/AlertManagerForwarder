@@ -14,7 +14,7 @@ logger = logging.getLogger(__name__)
 ALERTMANAGER_EXTERNAL_URL = os.getenv("ALERTMANAGER_EXTERNAL_URL", "http://127.0.0.1:9093/api/v1/alerts")
 
 @app.route('/', methods=['POST'])
-def redirect_alertmanager():
+def forwarder_alertmanager():
     try:
         data = request.get_json()
         logger.info("Received an alert for redirection")

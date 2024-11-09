@@ -1,0 +1,23 @@
+apiVersion: monitoring.coreos.com/v1alpha1
+kind: AlertmanagerConfig
+metadata:
+  name: config-reciver
+  namespace: monitoring
+  labels:
+    release: prometheus
+spec:
+  route:
+    groupBy: ['alertname']
+    groupWait: 30s
+    groupInterval: 2m
+    repeatInterval: 2m
+    receiver: webhook
+    routes:
+      - match:
+          severity: critical
+        continue: true
+        receiver: webhook
+  receivers:
+    - name: webhook
+      webhookConfigs: #
+        - url: 'http://svc-alertmanager-forwarder.monitoring.svc.cluster.local'
