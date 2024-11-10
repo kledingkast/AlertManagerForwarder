@@ -4,10 +4,14 @@ on:
   push:
     branches:
       - main
+    paths:
+      - 'app/**'
+      - 'requirements.txt'
+      - 'Dockerfile'
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
 
     permissions:
       contents: read
