@@ -1,9 +1,17 @@
 
+<div align="center">
+  <img src="./logo.png" alt="AlertManagerForwarder Logo" width="300"/>
+</div>
+
 # AlertManagerForwarder
 
 **AlertManagerForwarder** is a Flask-based service that facilitates forwarding alerts between AlertManager instances.
 This tool provides a reliable way to bridge communication between AlertManager instances when direct communication is
 not feasible. It formats and forwards alerts, ensuring that important notifications are relayed effectively.
+
+## Demo
+
+![Application Demo](./driagrams/diagrams.gif)
 
 ## Features
 
