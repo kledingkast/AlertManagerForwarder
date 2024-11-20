@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: alertmanager-forwarder
+  namespace: monitoring
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: alertmanager-forwarder
+  template:
+    metadata:
+      labels:
+        app: alertmanager-forwarder
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: "kubernetes.io/hostname"
+                operator: In
+                values:
+                - k8s-02
+      containers:
+        - name: alertmanager-forwarder
+          image: ghcr.io/kledingkast/alertmanagerforwarder:1.0.5
+          ports:
+            - name: "5000-almafor"
+              containerPort: 5000
+          env:
+            - name: ALERTMANAGER_EXTERNAL_URL
+              value: "http://<ENDPOINT-YOUR-ALERTMANAGER>:9093/api/v1/alerts" # IMPORTANT
