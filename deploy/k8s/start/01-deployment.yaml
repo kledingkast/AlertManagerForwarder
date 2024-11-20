@@ -24,7 +24,7 @@ spec:
                 - k8s-02
       containers:
         - name: alertmanager-forwarder
-          image: ghcr.io/kledingkast/alertmanagerforwarder:1.0.5
+          image: ghcr.io/kledingkast/alertmanagerforwarder:1.0.6
           ports:
             - name: "5000-almafor"
               containerPort: 5000
